@@ -1,3 +1,4 @@
+import os
 from flask import Flask, request, abort
 
 from linebot import (
@@ -42,7 +43,8 @@ def handle_message(event):
 
 
 if __name__ == "__main__":
+    port = os.environ.get('PORT', 3333)
     app.run(
         host='0.0.0.0',
-        port='3333',
+        port=port,
     )

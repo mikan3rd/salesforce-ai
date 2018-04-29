@@ -15,6 +15,10 @@ import settings
 
 app = Flask(__name__)
 
+
+print("YOUR_CHANNEL_ACCESS_TOKEN:", settings.YOUR_CHANNEL_ACCESS_TOKEN)
+print("YOUR_CHANNEL_SECRET:", settings.YOUR_CHANNEL_SECRET)
+
 line_bot_api = LineBotApi(settings.YOUR_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(settings.YOUR_CHANNEL_SECRET)
 
@@ -43,6 +47,7 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
+    print("handle_message!!")
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=event.message.text))

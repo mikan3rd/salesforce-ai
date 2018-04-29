@@ -8,7 +8,7 @@ from linebot.exceptions import (
     InvalidSignatureError
 )
 from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage,
+    MessageEvent, TextMessage, TextSendMessage, ImageMessage,
 )
 
 import settings
@@ -27,7 +27,6 @@ def callback():
 
     # get request body as text
     body = request.get_data(as_text=True)
-    app.logger.info("Request body: " + body)
     print("body:", body)
 
     # handle webhook body
@@ -43,12 +42,15 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    print("handle_message!!")
-    print("event:", event)
-    print("reply_token:", event.reply_token)
+    print("handle_message:", event)
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=event.message.text))
+
+
+@handler.add(MessageEvent, message=ImageMessage)
+def handle_image(event):
+    print("handle_image:", event)
 
 
 if __name__ == "__main__":

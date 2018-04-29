@@ -52,6 +52,13 @@ def handle_message(event):
 def handle_image(event):
     print("handle_image:", event)
 
+    message_content = line_bot_api.get_message_content(event.message.id)
+    print("message_content:", message_content)
+
+    # line_bot_api.reply_message(
+    #     event.reply_token,
+    #     TextSendMessage(text=event.message.text))
+
 
 if __name__ == "__main__":
     port = os.environ.get('PORT', 3333)

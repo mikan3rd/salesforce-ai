@@ -21,14 +21,17 @@ handler = WebhookHandler('YOUR_CHANNEL_SECRET')
 def callback():
     # get X-Line-Signature header value
     signature = request.headers['X-Line-Signature']
+    print("signature:", signature)
 
     # get request body as text
     body = request.get_data(as_text=True)
     app.logger.info("Request body: " + body)
+    print("body:", body)
 
     # handle webhook body
     try:
         handler.handle(body, signature)
+
     except InvalidSignatureError:
         abort(400)
 

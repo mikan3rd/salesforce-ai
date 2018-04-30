@@ -47,7 +47,7 @@ def handle_message(event):
 
     if (text.startswith('http')):
         image_text = get_text_by_ms(text)
-        reply_message(image_text)
+        reply_message(event, image_text)
         return
 
     messages = [

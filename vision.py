@@ -5,6 +5,7 @@ import settings
 KEY1 = settings.KEY1
 
 endpoint = 'https://eastasia.api.cognitive.microsoft.com/vision/v1.0/ocr'
+
 image_url = "https://bazubu.com/wp-content/uploads/2013/03/7dec493403292ee13268a2a283d92c151.png"
 image_url2 = "https://upload.wikimedia.org/wikipedia/commons/5/57/Lorem_Ipsum_Helvetica.png"
 image_url3 = "https://datumstudio.jp/wp-content/uploads/2018/01/pexels-photo-800721-1024x678.jpeg"

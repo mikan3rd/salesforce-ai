@@ -43,10 +43,6 @@ def get_text_by_ms(image_url=None, image=None):
         )
 
     data = response.json()
-
-    from pprint import pprint
-    pprint(data)
-
     text = ''
     for region in data['regions']:
         for line in region['lines']:

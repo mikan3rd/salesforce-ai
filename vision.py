@@ -11,24 +11,41 @@ image_url2 = "https://upload.wikimedia.org/wikipedia/commons/5/57/Lorem_Ipsum_He
 image_url3 = "https://datumstudio.jp/wp-content/uploads/2018/01/pexels-photo-800721-1024x678.jpeg"
 
 
-def get_text_by_ms(image_url=None, _file=None):
-    if image_url is None and _file is None:
+def get_text_by_ms(image_url=None, image=None):
+    if image_url is None and image is None:
         return '必要な情報が足りません'
 
-    headers = {
-        'Ocp-Apim-Subscription-Key': KEY1,
-        'Content-Type': 'application/json',
-    }
     params = {'visualFeatures': 'Categories,Description,Color'}
-    data = {'url': image_url}
-    response = requests.post(
-        endpoint,
-        headers=headers,
-        params=params,
-        json=data
-    )
+
+    if image_url:
+        headers = {
+            'Ocp-Apim-Subscription-Key': KEY1,
+            'Content-Type': 'application/json',
+        }
+        data = {'url': image_url}
+        response = requests.post(
+            endpoint,
+            headers=headers,
+            params=params,
+            json=data
+        )
+
+    elif image is not None:
+        headers = {
+            'Ocp-Apim-Subscription-Key': KEY1,
+            "Content-Type": "application/octet-stream"
+        }
+        response = requests.post(
+            endpoint,
+            headers=headers,
+            params=params,
+            data=image,
+        )
+
     data = response.json()
-    # pprint(data)
+
+    from pprint import pprint
+    pprint(data)
 
     text = ''
     for region in data['regions']:

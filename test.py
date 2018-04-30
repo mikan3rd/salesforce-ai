@@ -66,12 +66,18 @@ def handle_image(event):
     message_content = line_bot_api.get_message_content(message_id)
     print("message_content:", message_content)
 
-    i = Image.open(BytesIO(message_content.content))
-    filename = '/tmp/' + message_id + '.jpg'
-    i.save(filename)
+    test_image = BytesIO(message_content.content)
+    print("test_image:", test_image)
 
-    text = 'まだ画像のアップロードには対応してないよ！'
-    reply_message(event, TextSendMessage(text=text))
+    image_text = get_text_by_ms(image=test_image)
+    reply_message(event, TextSendMessage(text=image_text))
+
+    # i = Image.open(test_image)
+    # filename = '/tmp/' + message_id + '.jpg'
+    # i.save(filename)
+
+    # text = 'まだ画像のアップロードには対応してないよ！'
+    # reply_message(event, TextSendMessage(text=text))
 
 
 def reply_message(event, messages):
@@ -79,6 +85,7 @@ def reply_message(event, messages):
         event.reply_token,
         messages=messages,
     )
+    print("messages:", messages)
 
 
 if __name__ == "__main__":

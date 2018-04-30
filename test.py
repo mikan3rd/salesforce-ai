@@ -46,13 +46,16 @@ def handle_message(event):
 
     if (text.startswith('http')):
         image_text = get_text_by_ms(text)
-        reply_message(event, TextSendMessage(text=image_text))
-        return
+        messages = [
+            TextSendMessage(text=image_text),
+            TextSendMessage(text='文字起こししたよ！')
+        ]
 
-    messages = [
-        TextSendMessage(text=text),
-        TextSendMessage(text='画像のURLを送ってみてね!'),
-    ]
+    else:
+        messages = [
+            TextSendMessage(text=text),
+            TextSendMessage(text='画像を送信するか、画像のURLを送ってみてね!'),
+        ]
 
     reply_message(event, messages)
 
@@ -66,8 +69,18 @@ def handle_image(event):
 
     image = BytesIO(message_content.content)
 
-    image_text = get_text_by_ms(image=image)
-    reply_message(event, TextSendMessage(text=image_text))
+    try:
+        image_text = get_text_by_ms(image=image)
+
+        messages = [
+            TextSendMessage(text=image_text),
+            TextSendMessage(text='文字起こししたよ！')
+        ]
+
+        reply_message(event, messages)
+
+    except Exception as e:
+        reply_message(event, TextSendMessage(text='エラーが発生しました'))
 
 
 def reply_message(event, messages):

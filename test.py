@@ -70,8 +70,8 @@ def handle_image(event):
     filename = '/tmp/' + message_id + '.jpg'
     i.save(filename)
 
-    text = '画像を取得しました'
-    reply_message(event, text)
+    text = 'まだ画像のアップロードには対応してないよ！'
+    reply_message(event, TextSendMessage(text=text))
 
 
 def reply_message(event, messages):

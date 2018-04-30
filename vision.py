@@ -11,13 +11,16 @@ image_url2 = "https://upload.wikimedia.org/wikipedia/commons/5/57/Lorem_Ipsum_He
 image_url3 = "https://datumstudio.jp/wp-content/uploads/2018/01/pexels-photo-800721-1024x678.jpeg"
 
 
-def get_text_by_ms(url):
+def get_text_by_ms(image_url=None, _file=None):
+    if image_url is None and _file is None:
+        return '必要な情報が足りません'
+
     headers = {
         'Ocp-Apim-Subscription-Key': KEY1,
         'Content-Type': 'application/json',
     }
     params = {'visualFeatures': 'Categories,Description,Color'}
-    data = {'url': url}
+    data = {'url': image_url}
     response = requests.post(
         endpoint,
         headers=headers,
@@ -44,4 +47,4 @@ def get_text_by_ms(url):
 
 
 if __name__ == "__main__":
-    get_text_by_ms(image_url)
+    get_text_by_ms()

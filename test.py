@@ -1,23 +1,23 @@
 import os
-from flask import Flask, request, abort
+from io import BytesIO
 
-from linebot import (
-    LineBotApi, WebhookHandler
-)
-from linebot.exceptions import (
-    InvalidSignatureError
-)
-from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage, ImageMessage,
-)
+from flask import Flask, abort, request
+from linebot import LineBotApi, WebhookHandler
+from linebot.exceptions import InvalidSignatureError
+from linebot.models import (ImageMessage, MessageEvent, TextMessage,
+                            TextSendMessage)
+from PIL import Image
 
 import settings
+from vision import get_text_by_ms
 
 app = Flask(__name__)
 
 
 line_bot_api = LineBotApi(settings.YOUR_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(settings.YOUR_CHANNEL_SECRET)
+
+endpoint = 'https://eastasia.api.cognitive.microsoft.com/vision/v1.0'
 
 
 @app.route("/callback", methods=['POST'])
@@ -43,21 +43,42 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     print("handle_message:", event)
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text=event.message.text))
+    text = event.message.text
+
+    if (text.startswith('http')):
+        image_text = get_text_by_ms(text)
+        reply_message(image_text)
+        return
+
+    messages = [
+        TextSendMessage(text=text),
+        TextSendMessage(text='画像のURLを送ってみてね!'),
+    ]
+
+    reply_message(event, messages)
 
 
 @handler.add(MessageEvent, message=ImageMessage)
 def handle_image(event):
     print("handle_image:", event)
 
-    message_content = line_bot_api.get_message_content(event.message.id)
+    message_id = event.message.id
+    message_content = line_bot_api.get_message_content(message_id)
     print("message_content:", message_content)
 
-    # line_bot_api.reply_message(
-    #     event.reply_token,
-    #     TextSendMessage(text=event.message.text))
+    i = Image.open(BytesIO(message_content.content))
+    filename = '/tmp/' + message_id + '.jpg'
+    i.save(filename)
+
+    text = '画像を取得しました'
+    reply_message(event, text)
+
+
+def reply_message(event, messages):
+    line_bot_api.reply_message(
+        event.reply_token,
+        messages=messages,
+    )
 
 
 if __name__ == "__main__":

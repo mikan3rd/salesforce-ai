@@ -47,12 +47,12 @@ def handle_message(event):
 
     if (text.startswith('http')):
         image_text = get_text_by_ms(text)
-        reply_message(event, [image_text])
+        reply_message(event, TextSendMessage(text=image_text))
         return
 
     messages = [
         TextSendMessage(text=text),
-        '画像のURLを送ってみてね!',
+        TextSendMessage(text='画像のURLを送ってみてね!'),
     ]
 
     reply_message(event, messages)

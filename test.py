@@ -6,7 +6,6 @@ from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import (ImageMessage, MessageEvent, TextMessage,
                             TextSendMessage)
-from PIL import Image
 
 import settings
 from vision import get_text_by_ms
@@ -64,20 +63,11 @@ def handle_image(event):
 
     message_id = event.message.id
     message_content = line_bot_api.get_message_content(message_id)
-    print("message_content:", message_content)
 
-    test_image = BytesIO(message_content.content)
-    print("test_image:", test_image)
+    image = BytesIO(message_content.content)
 
-    image_text = get_text_by_ms(image=test_image)
+    image_text = get_text_by_ms(image=image)
     reply_message(event, TextSendMessage(text=image_text))
-
-    # i = Image.open(test_image)
-    # filename = '/tmp/' + message_id + '.jpg'
-    # i.save(filename)
-
-    # text = 'まだ画像のアップロードには対応してないよ！'
-    # reply_message(event, TextSendMessage(text=text))
 
 
 def reply_message(event, messages):
@@ -85,7 +75,6 @@ def reply_message(event, messages):
         event.reply_token,
         messages=messages,
     )
-    print("messages:", messages)
 
 
 if __name__ == "__main__":

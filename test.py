@@ -48,7 +48,6 @@ def handle_message(event):
         image_text = get_text_by_ms(text)
         messages = [
             TextSendMessage(text=image_text),
-            TextSendMessage(text='文字起こししたよ！')
         ]
 
     else:
@@ -74,7 +73,6 @@ def handle_image(event):
 
         messages = [
             TextSendMessage(text=image_text),
-            TextSendMessage(text='文字起こししたよ！')
         ]
 
         reply_message(event, messages)

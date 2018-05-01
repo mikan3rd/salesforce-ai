@@ -16,8 +16,6 @@ app = Flask(__name__)
 line_bot_api = LineBotApi(settings.YOUR_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(settings.YOUR_CHANNEL_SECRET)
 
-endpoint = 'https://eastasia.api.cognitive.microsoft.com/vision/v1.0'
-
 
 @app.route("/callback", methods=['POST'])
 def callback():
